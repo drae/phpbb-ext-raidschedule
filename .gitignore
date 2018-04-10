@@ -1,0 +1,12 @@
+# Project folders
+**/node_modules
+dist/styles/aquila
+xhprof/
+
+tests/phpbb_unit_tests.sqlite2
+tests/test_config.php
+tests/tmp/*
+
+# Misc
+*.bak
+
