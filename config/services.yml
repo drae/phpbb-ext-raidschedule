@@ -1,0 +1,50 @@
+services:
+    numeric.raidschedule.listener:
+        class: numeric\raidschedule\event\main_listener
+        arguments:
+            - '@controller.helper'
+            - '@template'
+        tags:
+            - { name: event.listener }
+
+    numeric.raidschedule.controller:
+        class: numeric\raidschedule\controller\main
+        arguments:
+            - '@controller.helper'
+            - '@auth'
+            - '@config'
+            - '@dbal.conn'
+            - '@template'
+            - '@user'
+            - '@request'
+            - '@numeric.raidschedule.update_event_list'
+            - '@service_container'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+
+    numeric.raidschedule.update_event_list:
+        class: numeric\raidschedule\update_event_list
+        arguments:
+            - '@controller.helper'
+            - '@config'
+            - '@dbal.conn'
+
+#    numeric.raidschedule.notification.type.demo:
+#        class: numeric\raidschedule\notification\type\demo
+#        shared: false # service MUST not be shared for this to work!
+#        arguments:
+#            - '@user_loader'
+#            - '@dbal.conn'
+#            - '@cache.driver'
+#            - '@user'
+#            - '@auth'
+#            - '@config'
+#            - '%core.root_path%'
+#            - '%core.php_ext%'
+#            - '%tables.notification_types%'
+#            - '%tables.notifications%'
+#            - '%tables.user_notifications%'
+#        calls:
+#            - [set_controller_helper, [@controller.helper]]
+#        tags:
+#            - { name: notification.type }

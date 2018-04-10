@@ -1,0 +1,432 @@
+// Core variables and mixins
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins/grid";
+@import "~bootstrap/scss/mixins/breakpoints";
+
+// Override main stylesheet
+main {
+    padding-top: 0;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.affix {
+    position: fixed;
+}
+
+.raid-instance-gradient {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.page-content-inner.signup {
+    // force div to full height
+    height: 100%;
+}
+
+.hide-text {
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+}
+
+.input-block-level {
+    display: block;
+    width: 100%;
+    min-height: 28px;
+    box-sizing: border-box;
+}
+
+.raid-instance {
+    color: #efefef;
+    background: #000 url(/styles/aquila/theme/images/leather-blue.jpg) repeat;
+    height: 60vh;
+    margin-bottom: 0;
+    position: relative;
+    width: 100%;
+    z-index: 1;
+
+    &.fixed {
+        position: absolute;
+        top: -45px;
+    }
+}
+
+.raid-info {
+    align-self: flex-end;
+    align-items: stretch;
+    display: flex;
+    flex-basis: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+    justify-content: flex-start;
+
+    .raid-info-title {
+        flex-basis: 100%;
+        margin-bottom: 15px;
+        text-align: center;
+
+        @include media-breakpoint-up(md) {
+            flex: 0 0 67%;
+            margin-bottom: 0;
+            max-width: 67%;
+            text-align: left;
+        }
+
+        h2 {
+            color: #efefef;
+            font-size: 48px;
+            line-height: 1;
+            margin: 0;
+            padding: 0;
+
+            // Date & time
+            span {
+                display: block;
+                font-size: 16px;
+                padding-top: 10px;
+            }
+        }
+    }
+
+    .sign-not-sign {
+        flex-basis: 100%;
+
+        @include media-breakpoint-up(md) {
+            align-self: center;
+            flex: 0 0 33%;
+            margin-left: auto;
+            max-width: 33%;
+        }
+
+        .raid-info-btn {
+            text-align: center;
+
+            @include media-breakpoint-up(md) {
+                float: right;
+            }
+
+            .btn {
+                border: solid 2px rgba(255, 255, 255, 0.75);
+                box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.5);
+                margin-bottom: 5px;
+            }
+
+            span {
+                display: block;
+
+                a {
+                    padding-bottom: 2px;
+                    color: #efefef;
+                    border-bottom: dotted 1px #efefef;
+
+                    &:active {
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.raid-signup-timeline {
+    align-self: flex-end;
+    align-items: stretch;
+    display: flex;
+    flex-basis: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+    justify-content: flex-start;
+
+    .signup-list {
+        flex: 0 0 100%;
+
+        @include media-breakpoint-up(md) {
+            @include make-col(8);
+            padding: 0 20px 0 0;
+        }
+
+        .list-signups {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            transition: all 0.75s;
+
+            h2 {
+                border-bottom: solid 1px hsla(0,0%,100%,.05);
+                font-size: 1.5rem;
+                margin-bottom: 5px;
+                margin-top: 0;
+                text-transform: capitalize;
+            }
+
+            li {
+                margin-bottom: 15px;
+            }
+
+            dl {
+                display: block;
+                margin-bottom: 1px;
+                overflow: hidden;
+            }
+
+            dt {
+                display: block;
+                float: left;
+                width: 35%;
+            }
+
+            dd {
+                color: #efefef;
+                display: block;
+                margin-bottom: 0;
+                margin-left: 35%;
+                padding: 8px;
+                text-align: right;
+                text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
+
+                .user-select:hover {
+                    border-bottom: 0;
+                    cursor: pointer;
+                }
+            }
+
+            a {
+                color: #efefef;
+                text-shadow: none;
+                text-decoration: none;
+            }
+
+            a:active {
+                color: #fff;
+            }
+
+            .player-has-signed dd {
+                background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%,rgba(0, 0, 0, 0.33) 100%);
+
+                &.selected {
+                    background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%,rgba(20, 123, 21, 0.75) 100%);
+                }
+
+                &.reserve {
+                    background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%,rgba(20, 100, 200, 0.75) 100%);
+                }
+
+                .right-box {
+                    position: relative;
+                }
+            }
+
+            .player-has-unsigned {
+                opacity: 0.2;
+                position: relative;
+            }
+        }
+    }
+
+    .signup-timeline {
+        flex: 0 0 100%;
+        max-height: 400px;
+        margin: 20px 0 0;
+        padding: 0;
+        position: relative;
+
+        @include media-breakpoint-up(md) {
+            @include make-col(4);
+            max-height: initial;
+            padding-left: 20px;
+        }
+
+        &:before {
+            background: rgba(#666, 0.5);
+            bottom: 0;
+            content: "";
+            display: block;
+            margin: 0 20px;
+            position: absolute;
+            top: 0;
+            width: 1px;
+        }
+
+        .timeline-container {
+            overflow: hidden;
+            height: 600px;
+        }
+
+        .timeline {
+            margin-bottom: 0;
+            position: relative;
+
+            li {
+                padding-left: 0;
+                list-style: none;
+                margin-bottom: 10px;
+                position: relative;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                &.month {
+                    background-color: rgba(100, 100, 100, 1);
+                    margin-left: 10px;
+                    padding: 2px 10px 2px 35px;
+                }
+
+                .timeline-badge {
+                    background-color: rgba(100, 100, 100, 1);
+                    border-radius: 50%;
+                    color: #fff;
+                    font-size: 1.4em;
+                    left: 9px;
+                    line-height: 24px;
+                    position: absolute;
+                    text-align: center;
+                    top: 8px;
+
+                    &.event {
+                        height: 24px;
+                        width: 24px;
+                    }
+
+                    &.active {
+                        border: solid 3px #fff;
+                    }
+
+                    &.selected {
+                        box-shadow: 0 0 10px 5px rgba(0, 200, 0, 0.75);
+                    }
+
+                    &.reserve {
+                        box-shadow: 0 0 10px 5px rgba(20, 100, 200, 0.75);
+                    }
+
+                    &.signed {
+                        box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.75);
+                    }
+
+                    &.misc {
+                        height: 10px;
+                        left: 16px;
+                        top: 10px;
+                        width: 10px;
+                    }
+                }
+
+                .timeline-panel {
+                    margin-left: 44px;
+                    padding: 5px 10px;
+                    position: relative;
+
+                    &.event {
+                        background-color: rgba(150, 150, 150, 1);
+                    }
+
+                    &.misc {
+                        background-color: rgba(100, 100, 100, 1);
+                    }
+                }
+
+                span {
+                    display: block;
+                }
+
+                .raid-date {
+                    font-size: 0.9em;
+                }
+
+                .raid-title {
+                    font-size: 1.1em;
+                    padding-bottom: 5px;
+                    position: relative;
+
+                    &:last-of-type {
+                        padding-bottom: 0;
+                    }
+
+                    a {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+
+        .post-list {
+            margin-top: 5px;
+            padding: 0;
+
+            li {
+                font-size: 1.1em;
+            }
+
+            a {
+                padding: 8px 15px;
+
+                &:hover {
+                    text-decoration: none;
+                    border-bottom: 0;
+                }
+            }
+        }
+    }
+}
+
+/**
+ *	Wrapper for the list of signups
+**/
+.raid-instance-content {
+    position: relative;
+}
+
+.raid-stats {
+    list-style: none;
+    margin: 0;
+    padding: 20px 0;
+    text-align: center;
+
+    li {
+        display: inline;
+        margin: 0 0 2px 0;
+        padding: 4px 6px;
+        font-size: 1.1rem;
+        white-space: nowrap;
+    }
+}
+
+.fade-enter-active {
+  transition: all 0.5s;
+}
+
+.fade-enter {
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+.fade-move {
+  transition: transform 1s;
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.5s;
+}
+
+.slide-leave-active {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.slide-enter {
+  opacity: 0;
+  transform: translateX(30px);
+}
+

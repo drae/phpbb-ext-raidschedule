@@ -1,0 +1,13 @@
+Subject: Raid unsign notification - {RAID_TITLE}
+
+Hi,
+
+The following person has unsigned from the raid detailed below which is due to start in under six hours:
+
+User: {USERNAME}
+
+Raid: {RAID_TITLE}
+Date: {RAID_DATE}
+Time: {RAID_TIME}
+
+{EMAIL_SIG}

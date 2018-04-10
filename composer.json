@@ -1,0 +1,27 @@
+{
+    "name": "numeric/raidschedule",
+    "type": "phpbb-extension",
+    "description": "Scheduling extension",
+    "version": "1.0.0-dev",
+    "time": "2016-08-07",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "numeric",
+            "email": "paul@starstreak.net"
+        },
+        {
+            "name": "",
+            "role": ""
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "extra": {
+        "display-name": "Raid Schedule",
+        "soft-require": {
+            "phpbb/phpbb": ">=3.1.4,<3.2.0@dev"
+        }
+    }
+}

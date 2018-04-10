@@ -1,0 +1,13 @@
+Subject: Raid reminder - {RAID_TITLE}
+
+Hi {USERNAME},
+
+This is a quick email to remind you that you have been selected as a reserve for the following raid later today:
+
+Raid: {RAID_TITLE}
+Date: {RAID_DATE}
+Time: {RAID_TIME}
+
+If you are no longer able to attend this raid please unsign now!
+
+{EMAIL_SIG}

@@ -1,0 +1,180 @@
+<!-- INCLUDE overall_header.html -->
+
+	<!-- INCLUDECSS ./../../ext/numeric/raidschedule/adm/style/css/admin_calendar.css -->
+	<!-- INCLUDEJS ./../../ext/numeric/raidschedule/adm/style/js/signup.admin.js -->
+
+	<a name="maincontent"></a>
+
+	<h1>{L_ACP_RAID_CALENDAR}</h1>
+
+	<p>{L_ACP_RAID_CALENDAR_EXPLAIN}</p>
+
+	<div id="admin-calendar">
+		<calendar></calendar>
+		<event-modal></event-modal>
+		<delete-modal></delete-modal>
+	</div>
+
+	<template id="calendar-template">
+		<div>
+			<p class="the-month"><strong>[[monthName]] [[year]]</strong></p>
+
+			<p class="nav">
+				<a href="{U_LAST_MONTH}" @click.stop.prevent="ChangeMonth('prev')">{L_PREVIOUS}</a> &nbsp;
+				<a href="{U_THIS_MONTH}" @click.stop.prevent="ChangeMonth('this')">{L_TODAY}</a> &nbsp;
+				<a href="{U_NEXT_MONTH}" @click.stop.prevent="ChangeMonth('next')">{L_NEXT}</a>
+			</p>
+
+			<div class="calendar">
+				<div>
+					<ul class="header">
+						<li><span>{L_SUNDAY}</span></li>
+						<li><span>{L_MONDAY}</span></li>
+						<li><span>{L_TUESDAY}</span></li>
+						<li><span>{L_WEDNESDAY}</span></li>
+						<li><span>{L_THURSDAY}</span></li>
+						<li><span>{L_FRIDAY}</span></li>
+						<li><span>{L_SATURDAY}</span></li>
+					</ul>
+					<ul class="days">
+						<li v-for="day in days" :class="{ 'outside': day.otherMonth, 'today': day.today }" @click.stop.prevent="OpenEventModal(day.unix)" class="day">
+							<div class="date">
+								<span class="month">[[day.month]]</span>
+								<span class="day">[[day.number]]</span>
+								<span class="year">[[day.year]]</span>
+							</div>
+							<div class="events">
+								<div v-if="!day.otherMonth" v-for="raid in raids[day.number]" :style="{backgroundColor: '#' + raid.instance.colour}" @click.stop.prevent="OpenEventModal(day.unix, raid)" class="event">
+									<div class="event-text">
+										[[raid.start]] [[raid.instance.code]]
+										<span class="pull-right">([[raid.cid]])</span>
+									</div>
+									<div class="event-del" @click.stop.prevent="OpenConfirmModal(raid)">
+										<strong>X</strong>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</template>
+
+	<template id="modal-template" :month="month" :year="year">
+		<div class="modal-mask" @click="close" v-show="show" style="z-index:99999" transition="modal">
+			<div class="modal-center">
+				<div class="modal-container" @click.stop>
+					<slot></slot>
+				</div>
+			</div>
+		</div>
+	</template>
+
+	<template id="event-modal-template">
+		<modal :show.sync="show" :on-close="close">
+			<form id="event-form" method="post" action="{U_ACTION}">
+
+				<p class="error" v-show="error">[[error]]</p>
+
+				<fieldset id="raid-config-common">
+					<dl>
+						<dt><label for="date">{L_DAY}{L_COLON}</label></dt>
+						<dd><span>[[date]]</span></dd>
+
+						<dt><label for="start">{L_START_TIME}{L_COLON}</label></dt>
+						<dd>
+							<input class="text" type="time" name="start" v-model="start" /> ({L_LOCAL_TIME})
+						</dd>
+
+						<dt><label for="instance">{L_INSTANCE}{L_COLON}</label></dt>
+						<dd>
+							<select name="instance" v-model="instance">
+								<!-- BEGIN evt_c -->
+								<optgroup label="{evt_c.CATEGORY}">
+								<!-- BEGIN evt_t -->
+								<option value="{evt_c.evt_t.EID}">{evt_c.evt_t.NAME}</option>
+								<!-- END evt_t -->
+								</optgroup>
+								<!-- END evt_c -->
+							</select>
+						</dd>
+					</dl>
+				</fieldset>
+
+				<fieldset id="raid-config-repeat">
+					<dl>
+						<dt><label for="repeat_type">{L_REPEAT}{L_COLON}</label></dt>
+						<dd>
+							<select name="repeat_type" v-model="repeatType">
+								<option value="">{L_NEVER}</option>
+								<option value="W">{L_WEEKLY}</option>
+							</select>
+
+							<div class="section-repeat" v-show="repeatType">
+								<dl>
+									<dt><label for="repeat_int">{L_REPEAT_EVERY}{L_COLON}</label></dt>
+									<dd><input class="text" type="text" name="repeat_int" v-model="repeatInt"> <span>[[repeatTypeWord]]</span></dd>
+								</dl>
+
+								<dl>
+									<dt><label for="add-repeat-days">{L_ON}{L_COLON}</label></dt>
+									<dd>
+										<select name="repeat_day[]" multiple="multiple" v-model="repeatDays">
+											<option value="0">{L_SUNDAY}</option>
+											<option value="1">{L_MONDAY}</option>
+											<option value="2">{L_TUESDAY}</option>
+											<option value="3">{L_WEDNESDAY}</option>
+											<option value="4">{L_THURSDAY}</option>
+											<option value="5">{L_FRIDAY}</option>
+											<option value="6">{L_SATURDAY}</option>
+										</select>
+									</dd>
+								</dl>
+
+								<dl>
+									<dt><label for="repeat_end">{L_UNTIL}{L_COLON}</label></dt>
+									<dd><input class="text" type="date" name="repeat_end" size="10" v-model="repeatEnd"/> <br /><span style="font-size: 9px">{L_UNTIL_EXPLAIN}</span></dd>
+								</dl>
+							</div>
+						</dd>
+					</dl>
+				</fieldset>
+
+				<div class="jqfooter">
+					<span v-show="rid">
+						{L_APPLY_TO}{L_COLON}&nbsp;
+						<input type="radio" name="recurse" value="this" checked="checked" /> {L_RECURSE_THIS}&nbsp;
+						<input type="radio" name="recurse" value="future" /> {L_RECURSE_FUTURE}&nbsp;
+						<input type="radio" name="recurse" value="all" /> {L_RECURSE_ALL}&nbsp;
+					</span> &nbsp;
+					<input name="submit" id="submit" class="button1" type="submit" value="{L_SUBMIT}" @click.stop.prevent="submitEvent()" />
+				</div>
+
+			</form>
+		</modal>
+ 	</template>
+
+	<template id="delete-modal-template">
+		<modal :show.sync="show" :on-close="close">
+			<form id="delete-form" method="post" action="{U_ACTION}">
+
+				<fieldset class="center">
+					<p>{L_RAID_DELETE_EXPLAIN}</p>
+
+					<p class="error" v-show="error">[[error]]</p>
+
+					<span v-show="rid">
+						{L_APPLY_TO}{L_COLON}&nbsp;
+						<input type="radio" name="recurse" value="this" checked="checked" /> {L_RECURSE_THIS}&nbsp;
+						<input type="radio" name="recurse" value="future" /> {L_RECURSE_FUTURE}&nbsp;
+						<input type="radio" name="recurse" value="all" /> {L_RECURSE_ALL}&nbsp;
+					</span> &nbsp;
+					<input name="submit" id="submit" class="button1" type="submit" value="{L_DELETE}" @click.stop.prevent="deleteEvent()" />
+				</fieldset>
+
+			</form>
+		</modal>
+	</template>
+
+<!-- INCLUDE overall_footer.html -->

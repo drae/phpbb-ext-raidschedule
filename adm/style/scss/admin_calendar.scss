@@ -1,0 +1,389 @@
+/*
+	Raid calendar admin
+	-------------------
+*/
+.pull-right {
+    float: right;
+}
+
+.the-month {
+	float:			left;
+	padding-bottom:	3px;
+	margin:			0;
+	font-size:		1.4em;
+}
+
+.nav {
+	float:			right;
+	margin:			0;
+	padding-top:	10px;
+	font-size:		0.8em;
+}
+
+.calendar {
+    clear: both;
+
+    &:before {
+        content: " ";
+        display: block;
+    }
+
+    .header {
+        background-color:#ccc;
+        display: none;
+        list-style: none;
+        margin: 0;
+    }
+
+    .days {
+        background-color: #aaa;
+        font-size: 0.9em;
+        list-style: none;
+        margin:	0;
+        padding: 1px;
+
+        & > .day.outside {
+            display: none;
+        }
+
+        .events {
+            margin-bottom: 1rem;
+
+            .event {
+                box-sizing: border-box;
+                color: #fff;
+                cursor: pointer;
+                font-size: 9px;
+                margin: 0 5px 2px 5px;
+                overflow: hidden;
+                position: relative;
+                white-space: nowrap;
+
+                .event-text {
+                    font-size: 10px;
+                    overflow: auto;
+                    padding: 2px 4px;
+                    position: absolute;
+                    text-overflow: ellipsis;
+                    width: 80%;
+
+                    span {
+                        font-size: 8px;
+                        line-height: 12px;
+                    }
+                }
+
+                .event-del {
+                    background: rgba(0,0,0,0.4);
+                    float: right;
+                    font-size: 10px;
+                    padding: 2px 2px;
+                    text-align: center;
+                    width: 10%;
+                }
+
+                &:active {
+                    color: white;
+                }
+            }
+        }
+
+        .date {
+            font-size: 0.9em;
+            padding-bottom: .5rem;
+            position: relative;
+
+            & > * {
+                display: inline-block;
+            }
+
+            .weekday:after, .day:after {
+                content: ','
+            }
+        }
+    }
+}
+
+@media (min-width : 960px) {
+    .calendar {
+        .header {
+            background: #ccc;
+            display: flex;
+            position: relative;
+            justify-content: flex-start;
+            align-items: stretch;
+            flex-wrap: wrap;
+
+            li {
+                border: 0;
+                display: list-item;
+                margin: 0;
+                overflow: hidden;
+                padding: 0;
+                position: relative;
+                text-align: center;
+                width: 100/7 * 1%;
+
+                &:after {
+                    content: '';
+                }
+
+                span {
+                    display: inline-block;
+                    font-size: 0.9em;
+                    padding: 5px;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+
+        .days {
+            align-items: stretch;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            position: relative;
+
+            & > .day {
+                background: #fff;
+                border-right: solid 1px #aaa;
+                box-sizing: border-box;
+                flex: 0 1 auto;
+                font-size: .9em;
+                height: 100px;
+                margin-bottom: 0;
+                padding: 0;
+                position: relative;
+                width: 100/7 * 1%;
+
+                &:nth-child(7n) {
+                    border: 0;
+                }
+
+                &:nth-child(n+1):nth-child(-n+7):before {
+                    display: none;
+                }
+
+                .date {
+                    background: #ccc;
+                    font-size: 0.9em;
+                    line-height: 1rem;
+                    margin-bottom: 5px;
+                    padding: 2px 5px;
+
+                    &:after {
+                        display: none;
+                    }
+
+                    .weekday, .month, .year {
+                        display: none;
+                    }
+
+                    .day:after {
+                        content: ''
+                    }
+                }
+
+                &.outside {
+                    background: #ddd;
+                    display: inline-block;
+
+                    .date .day {
+                        opacity: .5
+                    }
+                }
+
+                &.empty {
+                    display: inline-block;
+                }
+
+                &.today {
+                    background-color: #66a538;
+
+                    .date {
+                        background-color: #387700;
+                        color: #fff;
+                    }
+                }
+
+                .events {
+                    box-sizing: border-box;
+                    overflow: auto;
+
+                    .event {
+                        box-sizing: border-box;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+	Event addition forms
+*/
+.modal-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(100, 100, 100, .5);
+    transition: opacity .3s ease;
+}
+
+.modal-center {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+}
+
+.modal-container {
+	width: 		500px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+
+	padding: 			15px;
+	border: 			3px solid #dadada;
+	background-color: 	#fff;
+	color: 				#6a6a6a;
+}
+
+.modal-enter, .modal-leave {
+    opacity: 0;
+}
+
+.modal-container h2 {
+	margin-top: 0;
+}
+
+.modal-container .jqclose {
+	display:	block;
+	width:		25px;
+	height:		25px;
+	float:		right;
+}
+.modal-container .jqbusy {
+	display:	none;
+	float:		right;
+	width:		32px;
+	height:		32px;
+}
+.modal-container .jqheader {
+	display:		block;
+	padding-top:	5px;
+	margin-bottom:	5px;
+}
+.modal-container .jqcreator {
+	display:	block;
+	height:		26px;
+	color:		#6a6a6a;
+	font:		bold 11px Arial,sans-serif;
+}
+.modal-container .jqfooter {
+	display:		block;
+    float: right;
+	padding-top:	8px;
+
+    span {
+        font-size: 0.9em;
+    }
+
+    input[type="radio"] {
+        margin-top: -1px;
+    }
+}
+.modal-container .jqerror {
+	padding:			4px;
+	background-color:	#a00;
+	margin-bottom:		10px;
+	color:				#fff;
+	text-align:			center;
+	font:				normal 11px Verdana,serif;
+}
+.modal-container fieldset {
+	margin: 	0;
+	border:		0;
+	padding: 	0;
+	background-color: transparent;
+}
+.modal-container fieldset dl {
+	margin:		0px 10px;
+}
+.modal-container fieldset dt {
+	float:			left;
+	width: 			25%;
+	text-align: 	left;
+}
+.modal-container fieldset dd {
+	margin-left: 	25%;
+	margin-bottom:	10px;
+	padding-left: 	5px;
+	border-left: 	0;
+	vertical-align: top;
+}
+.modal-container dl dd textarea {
+	width:		320px;
+	height:		90px;
+}
+.modal-container dl dd textarea.wws {
+	height:		35px;
+}
+.modal-container .section-repeat {
+	margin-top:	15px;
+}
+.modal-container fieldset dl dl {
+	margin:	0;
+}
+.modal-container fieldset dl dl dt {
+	float:			left;
+	width: 			30%;
+	text-align: 	left;
+}
+.modal-container fieldset dl dl dd {
+	margin-left: 	30%;
+	padding-left: 	5px;
+	border-left: 	0;
+	vertical-align: top;
+}
+.modal-container .checkboxes {
+	font-size:	1.0em;
+}
+.modal-container .checkboxes input {
+	margin-bottom: 5px;
+}
+
+/**
+ *
+**/
+.confirm-box {
+	display: 			none;
+	position: 			fixed;
+	top: 				30%;
+	left: 				50%;
+	width:				400px;
+
+	margin-left: 		-200px;
+	padding: 			15px;
+	border: 			3px solid #dadada;
+	background-color: 	#fff;
+	color: 				#6a6a6a;
+}
+
+.confirm-box p {
+	font-size:	0.9em;
+}
+

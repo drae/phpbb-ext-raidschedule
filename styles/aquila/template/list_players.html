@@ -1,0 +1,183 @@
+<!-- INCLUDE overall_header.html -->
+
+<!-- INCLUDECSS ./ext/numeric/raidschedule/styles/aquila/css/signup.css -->
+<!-- INCLUDEJS ./ext/numeric/raidschedule/styles/aquila/js/signup.index.js -->
+
+	<script>
+		const root = {
+			rid: {RID},
+			uid: {UID},
+			raid_name: '{RAID_INSTANCE}',
+			raid_date: '{RAID_DATE}',
+			raid_banner: '{RAID_BANNER}',
+			raid_posts: '{POSTS}',
+			raid_topic: '{U_TOPIC}',
+			can_sign: {S_CAN_SIGN},
+			player_signed: {S_SIGNED_UP}
+		}
+
+		const players = {
+			total_raiders: {TOTAL_RAIDERS},
+			total_signed: {TOTAL_SIGNED},
+			total_unsigned: {TOTAL_UNSIGNED},
+			total_selected: {TOTAL_SELECTED},
+			can_select: {S_CAN_SELECT},
+			roles: [
+				<!-- BEGIN roles -->
+				{ name: '{roles.NAME}', players: [
+					<!-- BEGIN players -->
+					{ username: '{roles.players.USERNAME}', uid: {roles.players.UID}, css: '{roles.players.CSS}', link: '{roles.players.LINK}', signed: {roles.players.SIGNED}, selected: {roles.players.SELECTED}, l_selected: '{roles.players.L_SELECTED}' },
+					<!-- END players -->
+				]},
+				<!-- END roles -->
+			]
+		}
+
+		$(document).ready(function() {
+			const timeline = document.querySelector('#perfect-scroll-wrapper')
+
+			if (window.innerWidth >= 768) {
+				$('.timeline-container').css({'height': $('.signup-list').outerHeight(true) + 'px'})
+			}
+
+			$('.raid-info').waypoint({
+				handler: function(direction) {
+					switch (direction) {
+						case 'down':
+							$('.raid-instance').css({'position': 'fixed', 'top': ($('.navbar').outerHeight(true) + (window.innerHeight < 800 ? 40 : 60) - $('.raid-info').offset().top) + 'px'})
+							$('.raid-instance-content').css({'padding-top': $('.raid-instance').outerHeight(true) + 'px'})
+							var {left, top, width, height} = timeline.getBoundingClientRect()
+							timeline.style.position = 'fixed'
+							timeline.style.top = top + 'px'
+							timeline.style.left = left + 'px'
+							timeline.style.width = width + 'px'
+							timeline.style.height = height + 'px'
+
+							break;
+
+						case 'up':
+							$('.raid-instance-content').css({'padding-top': '0'})
+							$('.raid-instance').css({'position': 'relative', 'top': '0'})
+							timeline.style.position = null
+							timeline.style.top = null
+							timeline.style.left = null
+							timeline.style.width = null
+							timeline.style.height = null
+
+							break;
+					}
+				},
+				offset: $('.navbar').outerHeight() + (window.innerHeight < 800 ? 40 : 60)
+			})
+		})
+	</script>
+
+	<div id="signup" v-cloak>
+
+		<div class="raid-instance"><!--  : style="raidBanner" -->
+			<svg class="raid-instance-gradient">
+				<defs>
+					<linearGradient id="alphaLinearMain" x1="0%" y1="0%" x2="0%" y2="100%">
+						<stop offset="0" stop-color="white" stop-opacity="100%"></stop>
+						<stop offset="70%" stop-color="white" stop-opacity="100%"></stop>
+						<stop offset="100%" stop-color="white" stop-opacity="0"></stop>
+					</linearGradient>
+					<mask id="MaskMainBg">
+						<rect x="0" y="0" width="100%" height="100%" fill="url(#alphaLinearMain)"></rect>
+					</mask>
+					<pattern id="bgPattern" patternUnits="userSpaceOnUse" width="100%" height="100%">
+						<image href="/ext/numeric/raidschedule/styles/aquila/images/{RAID_BANNER}" x="0" y="0" width="100%" height="100%" patternUnits="objectBoundingBox" preserveAspectRatio="xMidYMid slice"></image>
+					</pattern>
+				</defs>
+				<rect x="0" y="0" width="100%" height="100%" fill="url(#bgPattern)" mask="url(#MaskMainBg)"></rect>
+			</svg>
+
+			<div class="page-content">
+				<div class="page-content-inner signup">
+
+					<div class="raid-info">
+						<div class="raid-info-title">
+							<h2>[[raid_name]] <span>[[raid_date | formatTime('dddd DD MMMM YYYY, HH:mm')]]</span></h2>
+						</div>
+
+						<div class="sign-not-sign" :class="{'is-signed': player_signed, 'is-not-signed': !player_signed}">
+							<div class="raid-info-btn">
+								<button v-if="player_signed" class="btn btn-vlg btn-success" :disabled="!can_sign" @click.stop.prevent="RaidSign()"><i class="fa fa-times" aria-hidden="true"></i> {L_UNSIGN}</button>
+								<button v-else class="btn btn-vlg btn-danger" :disabled="!can_sign" @click.stop.prevent="RaidSign()"><i class="fa fa-exclamation" aria-hidden="true"></i> {L_SIGN}</button>
+								<span v-show="raid_topic"><a :href="[[raid_topic]]">{L_DISCUSS_THIS} ([[raid_posts]])</a></span>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="raid-instance-content">
+			<div class="page-content">
+				<div class="page-content-inner">
+
+					<div class="raid-signup-timeline">
+						<player-listing :rid="rid" :uid="uid"></player-listing>
+						<signup-timeline :rid="rid" :uid="uid"></signup-timeline>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<template id="player-signup-list">
+		<div class="signup-list">
+			<ul class="raid-stats">
+				<li id="raid-players-signed"><strong>[[total_raiders]]</strong> {L_PLAYERS}</li>
+				<li id="raid-players-signed"><strong>[[total_signed]]</strong> {L_PLAYERS_SIGNED}</li>
+				<li id="raid-players-signed"><strong>[[total_unsigned]]</strong> {L_PLAYERS_UNSIGNED}</li>
+				<li id="raid-total-selected"><strong>[[total_selected]]</strong> {L_PLAYERS_SELECTED}</li>
+			</ul>
+
+			<transition-group tag="ul" name="slide" mode="out-in" class="list-signups">
+				<li class="list-roles" v-for="role in roles" :key="role.name">
+					<h2>[[role.name]]</h2>
+
+					<dl v-for="player in role.players" :class="{ 'player-is-unconfirmed': !player.signed, 'player-has-unsigned': player.signed < 0, 'player-has-signed': player.signed }">
+						<dt>
+							<span class="class" :class="player.css">
+								<a :href="[[player.link]]">[[player.username]]</a>
+							</span>
+						</dt>
+						<dd v-if="player.signed > 0" class="select-or-not" :class="{ 'selected': player.selected == 1, 'reserve': player.selected == 2 }">
+							<span class="right-box">
+								<a v-if="can_select" class="user-select" @click.stop.prevent="SelectPlayer(player.uid)" >[[player.l_selected]]</a>
+								<span v-else>[[player.l_selected]]</span>
+							</span>
+						</dd>
+					</dl>
+				</li>
+			</transition-group>
+
+		</div>
+	</template>
+
+	<template id="signup-timeline">
+		<div class="signup-timeline">
+			<div id="perfect-scroll-wrapper" ref="scrollWrapper" infinite-wrapper class="timeline-container timeline">
+				<li v-for="day in entries" :key="day.time" class="day">
+					<div class="timeline-badge" :class="{'event': day.type, 'misc': !day.type, 'active': day.active, 'selected': day.selected == 1, 'reserve': day.selected == 2, 'signed': day.signed}" :style="{backgroundColor: day.colour}"></div>
+					<div class="timeline-panel" :class="{'event' : day.type, 'misc': !day.type, 'active': day.active, 'selected': day.selected == 1, 'reserve': day.selected == 2, 'signed': day.signed}" :style="{ background: day.colour }">
+						<span class="raid-date-day">[[day.l_time]]</span>
+
+						<template v-for="event in day.events">
+							<span class="raid-date">
+								<i class="fa fa-clock-o"></i> [[event.time | formatTime('HH:mm')]]
+							</span>
+							<span v-if="event.link" class="raid-title"><a :href="[[event.link]]" @click.stop.prevent="SelectRaid(event.rid)">[[event.title]]</a></span>
+							<span v-else class="raid-title">[[event.title]]</span>
+						</template>
+					</div>
+				</li>
+				<infinite-loading @infinite="InfiniteHandler"></infinite-loading>
+			</div>
+		</div>
+	</template>
+
+<!-- INCLUDE overall_footer.html -->

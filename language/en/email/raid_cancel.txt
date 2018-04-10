@@ -1,0 +1,11 @@
+Subject: Raid Cancellation - {RAID_TITLE}
+
+Hi,
+
+This email is to notify you that the following raid for which you had previously signed up to has been cancelled. Please check the forums and/or signup page for further information or details of possible replacement raids.
+
+Raid: {RAID_TITLE}
+Date: {RAID_DATE}
+Time: {RAID_TIME}
+
+{EMAIL_SIG}

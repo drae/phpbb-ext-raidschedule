@@ -1,0 +1,40 @@
+numeric_raidschedule_controller__rid__api_sign:
+    path: /signup/{rid}/sign
+    defaults: { _controller: numeric.raidschedule.controller:api_sign, _format: json }
+    requirements:
+        method: 'PUT'
+        rid: '\d+'
+        format: 'json'
+
+numeric_raidschedule_controller__rid__api_select:
+    path: /signup/{rid}/select/{uid}
+    defaults: { _controller: numeric.raidschedule.controller:api_select_user, _format: json }
+    requirements:
+        method: 'PUT'
+        rid: '\d+'
+        uid: '\d+'
+        format: 'json'
+
+numeric_raidschedule_controller__rid__api_timeline:
+    path: /signup/timeline/{start}/{action}
+    defaults: { _controller: numeric.raidschedule.controller:api_timeline, _format: json }
+    requirements:
+        method: 'GET'
+        start: '\d+'
+        action: '\w+'
+        format: 'json'
+
+numeric_raidschedule_controller__rid:
+    path: /signup/{rid}
+    defaults: { _controller: numeric.raidschedule.controller:use_raid_id, _format: html }
+    requirements:
+        method: 'GET'
+        rid: '\d+'
+        format: 'html|json'
+
+numeric_raidschedule_controller__no_rid:
+    path: /signup/
+    defaults: { _controller: numeric.raidschedule.controller:set_raid_id, _format: html }
+    requirements:
+        method: 'GET'
+        format: 'html|json'

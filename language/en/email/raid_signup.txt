@@ -1,0 +1,13 @@
+Subject: Raid Signup - {RAID_TITLE}
+
+Hi {USERNAME},
+
+This email is to notify you of your signing up to the following raid:
+
+Raid: {RAID_TITLE}
+Date: {RAID_DATE}
+Time: {RAID_TIME}
+
+Remember! Signing up to a raid is not a guarantee of a place - check the schedule page regularly.
+
+{EMAIL_SIG}

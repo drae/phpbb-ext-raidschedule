@@ -1,0 +1,17 @@
+Subject: Raid Signup - {RAID_TITLE}
+
+Hi,
+
+The raid you signed to below has been changed:
+
+Raid: {OLD_RAID_TITLE}
+Date: {OLD_RAID_DATE}
+Time: {OLD_RAID_TIME}
+
+The following is the updated information:
+
+Raid: {RAID_TITLE}
+Date: {RAID_DATE}
+Time: {RAID_TIME}
+
+{EMAIL_SIG}
