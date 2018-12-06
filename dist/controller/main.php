@@ -132,7 +132,6 @@ class main
 			'signup'	=> ($topic_id) ? append_sid("/viewtopic.php?f=33&amp;t=$topic_id") : '',
 		);
 	}
-
 	private function get_raid_stats($rid = 0)
 	{
 		$eid = $raid_date = 0;

@@ -1,0 +1,92 @@
+<!-- INCLUDE overall_header.html -->
+
+	<% for (var css in htmlWebpackPlugin.files.css) { %>
+	<!-- INCLUDECSS ./ext/numeric/raidschedule/styles/aquila/css/<%= htmlWebpackPlugin.files.css[css] %> -->
+	<% } %>
+
+	<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+	<!-- INCLUDEJS ./ext/numeric/raidschedule/styles/aquila/js/<%= htmlWebpackPlugin.files.chunks[chunk].entry %> -->
+	<% } %>
+
+	<% if (htmlWebpackPlugin.options.devServer) { %>
+	<script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
+	<% } %>
+
+	<script>
+		const messages = {
+			L_DISCUSS_THIS: '{L_DISCUSS_THIS}',
+			L_SIGN: '{L_SIGN}',
+			L_UNSIGN: '{L_UNSIGN}',
+			L_PLAYERS: '{L_PLAYERS}',
+			L_PLAYERS_SIGNED: '{L_PLAYERS_SIGNED}',
+			L_PLAYERS_UNSIGNED: '{L_PLAYERS_UNSIGNED}',
+			L_PLAYERS_SELECTED: '{L_PLAYERS_SELECTED}',
+		}
+
+		const rid = {RID}
+
+		const header = {
+			raid_name: '{RAID_INSTANCE}',
+			raid_date: {RAID_DATE},
+			raid_banner: '{RAID_BANNER}',
+			raid_posts: '{POSTS}',
+			raid_topic: '{U_TOPIC}',
+			can_sign: {S_CAN_SIGN},
+			player_signed: {S_SIGNED_UP}
+		}
+
+		const players = {
+			total_raiders: {TOTAL_RAIDERS},
+			total_signed: {TOTAL_SIGNED},
+			total_unsigned: {TOTAL_UNSIGNED},
+			total_selected: {TOTAL_SELECTED},
+			can_select: {S_CAN_SELECT},
+			roles: [
+				<!-- BEGIN roles -->
+				{ name: '{roles.NAME}', players: [
+					<!-- BEGIN players -->
+					{ username: '{roles.players.USERNAME}', uid: {roles.players.UID}, css: '{roles.players.CSS}', link: '{roles.players.LINK}', signed: {roles.players.SIGNED}, selected: {roles.players.SELECTED}, l_selected: '{roles.players.L_SELECTED}' },
+					<!-- END players -->
+				]},
+				<!-- END roles -->
+			]
+		}
+
+		$(document).ready(function() {
+			const timeline = document.querySelector('#perfect-scroll-wrapper')
+
+			$('.raid-info').waypoint({
+				handler: function(direction) {
+					switch (direction) {
+						case 'down':
+							$('.raid-instance').css({'position': 'fixed', 'top': ($('.navbar').outerHeight(true) + (window.innerHeight < 800 ? 40 : 60) - $('.raid-info').offset().top) + 'px'})
+							$('.raid-instance-content').css({'padding-top': $('.raid-instance').outerHeight(true) + 'px'})
+							var {left, top, width, height} = timeline.getBoundingClientRect()
+							timeline.style.position = 'fixed'
+							timeline.style.top = top + 'px'
+							timeline.style.left = left + 'px'
+							timeline.style.width = width + 'px'
+							timeline.style.height = height + 'px'
+
+							break;
+
+						case 'up':
+							$('.raid-instance-content').css({'padding-top': '0'})
+							$('.raid-instance').css({'position': 'relative', 'top': '0'})
+							timeline.style.position = null
+							timeline.style.top = null
+							timeline.style.left = null
+							timeline.style.width = null
+							timeline.style.height = null
+
+							break;
+					}
+				},
+				offset: $('.navbar').outerHeight() + (window.innerHeight < 800 ? 40 : 60)
+			})
+		})
+	</script>
+
+	<div id="signup"></div>
+
+<!-- INCLUDE overall_footer.html -->
